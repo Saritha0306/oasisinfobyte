@@ -1,0 +1,151 @@
+import java.util.Scanner;
+
+class BankAccount {
+  private String userId;
+  private String pin;
+  private double balance;
+
+  public BankAccount(String userId, String pin, double balance) {
+    this.userId = userId;
+    this.pin = pin;
+    this.balance = balance;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public String getPin() {
+    return pin;
+  }
+
+  public double getBalance() {
+    return balance;
+  }
+
+  public void setBalance(double balance) {
+    this.balance = balance;
+  }
+
+  public void displayHistory() {
+    System.out.println("Transaction history for account " + userId);
+  }
+
+  public void withdraw(double amount) {
+    if (amount > balance) {
+      System.out.println("Insufficient funds");
+    } else {
+      balance -= amount;
+      System.out.println("Withdrew " + amount + ". Current balance: " + balance);
+    }
+  }
+
+  public void deposit(double amount) {
+    balance += amount;
+    System.out.println("Deposited " + amount + ". Current balance: " + balance);
+  }
+
+  public void transfer(BankAccount other, double amount) {
+    if (amount > balance) {
+      System.out.println("Insufficient funds");
+    } else {
+      balance -= amount;
+      other.setBalance(other.getBalance() + amount);
+      System.out.println("Transferred " + amount + " to account " + other.getUserId());
+    }
+  }
+}
+
+class ATM {
+  private BankAccount[] accounts;
+
+  public ATM(BankAccount[] accounts) {
+    this.accounts = accounts;
+  }
+
+  public void start() {
+    Scanner input = new Scanner(System.in);
+    System.out.println("Enter user id:");
+    String userId = input.nextLine();
+    System.out.println("Enter pin:");
+    String pin = input.nextLine();
+
+    BankAccount account = null;
+    for (BankAccount a : accounts) {
+      if (a.getUserId().equals(userId) && a.getPin().equals(pin)) {
+        account = a;
+        break;
+      }
+    }
+
+    if (account == null) {
+      System.out.println("Invalid user id or pin");
+      return;
+    }
+
+    System.out.println("Welcome, " + userId);
+    while (true) {
+      System.out.println("1. Transaction history");
+      System.out.println("2. Withdraw");
+      System.out.println("3. Deposit");
+      System.out.println("4. Transfer");
+      System.out.println("5. Quit");
+      System.out.println("Enter your choice:");
+      int choice = input.nextInt();
+      input.nextLine();
+
+      if (choice == 1) {
+        account.displayHistory();
+      } else if (choice == 2) {
+       
+                System.out.println("Enter amount:");
+        double amount = input.nextDouble();
+        input.nextLine();
+        account.withdraw(amount);
+      } else if (choice == 3) {
+        System.out.println("Enter amount:");
+        double amount = input.nextDouble();
+        input.nextLine();
+        account.deposit(amount);
+      } else if (choice == 4) {
+        System.out.println("Enter target user id:");
+        String targetUserId = input.nextLine();
+        System.out.println("Enter amount:");
+        double amount = input.nextDouble();
+        input.nextLine();
+
+        BankAccount targetAccount = null;
+        for (BankAccount a : accounts) {
+          if (a.getUserId().equals(targetUserId)) {
+            targetAccount = a;
+            break;
+          }
+        }
+
+        if (targetAccount == null) {
+          System.out.println("Invalid target user id");
+        } else {
+          account.transfer(targetAccount, amount);
+        }
+      } else if (choice == 5) {
+        break;
+      }
+    }
+
+    System.out.println("Thank you, have a nice day!");
+  }
+}
+
+public class Main {
+  public static void main(String[] args) {
+    BankAccount[] accounts = {
+      new BankAccount("123", "abc", 1000),
+      new BankAccount("456", "def", 2000),
+      new BankAccount("789", "ghi", 3000),
+    };
+
+    ATM atm = new ATM(accounts);
+    atm.start();
+  }
+}
+

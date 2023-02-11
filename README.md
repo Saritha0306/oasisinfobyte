@@ -1,1 +1,4 @@
-# oasisinfobyte
+OIBGRIP
+INTERNSHIP IN OASIS 
+THIS IS A GIT JOURNAL OF JANUARY P@ BATCH 
+#oasisinfobyte

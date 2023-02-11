@@ -1,0 +1,45 @@
+import java.util.Scanner;
+import java.util.Random;
+
+public class NumberGuessGame {
+    public static void main(String[] args) {1
+        Scanner sc = new Scanner(System.in);
+        Random rand = new Random();
+        int rounds = 0;
+        int totalAttempts = 0;
+        final int MAX_ATTEMPTS = 10;
+        boolean playAgain;
+
+        System.out.println("Welcome to the number guessing game!");
+        do {
+            int target = rand.nextInt(100) + 1;
+            int guess;
+            int attempts = 0;
+
+            System.out.println("The computer has generated a random number between 1 and 100. Try to guess it.");
+            System.out.println("You have " + MAX_ATTEMPTS + " attempts to guess the number.");
+            do {
+                System.out.print("Enter your guess (1-100): ");
+                guess = sc.nextInt();
+                attempts++;
+                if (guess < target) {
+                    System.out.println("The number is higher.");
+                } else if (guess > target) {
+                    System.out.println("The number is lower.");
+                }
+            } while (guess != target && attempts < MAX_ATTEMPTS);
+            totalAttempts += attempts;
+            rounds++;
+            if (guess == target) {
+                System.out.println("Congratulations! You got it in " + attempts + " attempts.");
+            } else {
+                System.out.println("Sorry, you ran out of attempts. The number was " + target + ".");
+            }
+            System.out.print("Do you want to play another round? (yes/no): ");
+            String input = sc.next();
+            playAgain = input.equalsIgnoreCase("yes");
+        } while (playAgain);
+        System.out.println("You played " + rounds + " rounds and used a total of " + totalAttempts + " attempts.");
+        System.out.println("Thanks for playing the number guessing game!");
+    }
+}
